@@ -14,5 +14,5 @@ Step 7: Check the translations.
 Step 8: It's done, now take a break, making translations is exhausting. :)  
 
 #### Video
-If the steps above are too complicated for you, or you just want to see the app without downloading it, here is a short video for you :)  
+If the steps above are too complicated for you, or you just want to see the app without downloading it, here is a short video guide for you :)  
 (https://youtu.be/dL53t1XEqg4)
