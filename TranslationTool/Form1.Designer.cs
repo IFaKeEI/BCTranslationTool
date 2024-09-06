@@ -120,7 +120,7 @@ namespace TranslationTool
             sourceFilter.Name = "sourceFilter";
             sourceFilter.Size = new Size(144, 23);
             sourceFilter.TabIndex = 5;
-            sourceFilter.TextChanged += TxtFilter_TextChanged;
+            sourceFilter.TextChanged += SourceFilter_TextChanged;
             // 
             // noteFilterLabel
             // 

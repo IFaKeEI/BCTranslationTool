@@ -53,47 +53,42 @@ namespace TranslationTool
             }
         }
 
-        private void TxtFilter_TextChanged(object sender, EventArgs e)
+        private void SourceFilter_TextChanged(object sender, EventArgs e)
         {
-            string filterText = this.sourceFilter.Text;
-
-            var filteredList = translationUnits?.Where(tu => tu.Source != null && tu.Source.Contains(filterText, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            this.bindingSource.DataSource = filteredList;
-            this.translationUnitList.DataSource = bindingSource;
+            ApplyFilters();
         }
 
         private void NoteFilter_TextChanged(object sender, EventArgs e)
         {
-            string filterText = this.noteFilter.Text;
-
-            var filteredList = translationUnits?.Where(tu => tu.XliffGeneratorNote != null && tu.XliffGeneratorNote.Contains(filterText, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            this.bindingSource.DataSource = filteredList;
-            this.translationUnitList.DataSource = bindingSource;
+            ApplyFilters();
         }
 
         private void TargetFilter_TextChanged(object sender, EventArgs e)
         {
-            string filterText = this.targetFilter.Text;
-
-            var filteredList = translationUnits?.Where(tu => tu.Target != null && tu.Target.Contains(filterText, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            this.bindingSource.DataSource = filteredList;
-            this.translationUnitList.DataSource = bindingSource;
+            ApplyFilters();
         }
 
         private void NonTranslatedCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.nonTranslatedCheckBox.Checked)
-            {
-                var filteredUnits = translationUnits?.Where(tu => string.IsNullOrEmpty(tu.Target) || tu.Target.Contains("[NAB")).ToList();
-                bindingSource.DataSource = filteredUnits;
-            }
-            else
-            {
-                bindingSource.DataSource = translationUnits;
-            }
+            ApplyFilters();
+        }
+
+        private void ApplyFilters()
+        {
+            string sourceFilterText = this.sourceFilter.Text;
+            string noteFilterText = this.noteFilter.Text;
+            string targetFilterText = this.targetFilter.Text;
+            bool filterUntranslated = this.nonTranslatedCheckBox.Checked;
+
+            var filteredList = translationUnits?.Where(tu =>
+                (string.IsNullOrEmpty(sourceFilterText) || (tu.Source != null && tu.Source.Contains(sourceFilterText, StringComparison.OrdinalIgnoreCase))) &&
+                (string.IsNullOrEmpty(targetFilterText) || (tu.Target != null && tu.Target.Contains(targetFilterText, StringComparison.OrdinalIgnoreCase))) &&
+                (string.IsNullOrEmpty(noteFilterText) || (tu.XliffGeneratorNote != null && tu.XliffGeneratorNote.Contains(noteFilterText, StringComparison.OrdinalIgnoreCase))) &&
+                (!filterUntranslated || string.IsNullOrEmpty(tu.Target) || tu.Target.Contains("[NAB"))
+                ).ToList();
+
+            this.bindingSource.DataSource = filteredList;
+            this.translationUnitList.DataSource = bindingSource;
         }
 
         private void DeveloperNoteCheckBox_CheckedChanged(object sender, EventArgs e)

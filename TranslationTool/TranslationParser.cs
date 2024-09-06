@@ -11,8 +11,14 @@ namespace TranslationTool
             XDocument xDoc = XDocument.Load(filePath);
 
             var fileElement = xDoc?.Root?.Element(XName.Get("file", "urn:oasis:names:tc:xliff:document:1.2"));
-            originalName = fileElement?.Attribute("original")?.Value ?? "";
             targetLanguage = fileElement?.Attribute("target-language")?.Value ?? "";
+            //originalName = fileElement?.Attribute("original")?.Value ?? "";
+            originalName = fileElement?.Attribute("original")?.Value ?? "";
+
+            if (!(originalName.EndsWith(".xlf", StringComparison.OrdinalIgnoreCase) && !(originalName.EndsWith(".xliff", StringComparison.OrdinalIgnoreCase))))
+            {
+                originalName = Path.GetFileName(filePath);
+            }
 
             XNamespace ns = "urn:oasis:names:tc:xliff:document:1.2";
 
