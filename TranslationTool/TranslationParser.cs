@@ -12,7 +12,6 @@ namespace TranslationTool
 
             var fileElement = xDoc?.Root?.Element(XName.Get("file", "urn:oasis:names:tc:xliff:document:1.2"));
             targetLanguage = fileElement?.Attribute("target-language")?.Value ?? "";
-            //originalName = fileElement?.Attribute("original")?.Value ?? "";
             originalName = fileElement?.Attribute("original")?.Value ?? "";
 
             if (!(originalName.EndsWith(".xlf", StringComparison.OrdinalIgnoreCase) && !(originalName.EndsWith(".xliff", StringComparison.OrdinalIgnoreCase))))
@@ -29,12 +28,9 @@ namespace TranslationTool
                     Id = node.Attribute("id")?.Value,
                     Source = node.Element(ns + "source")?.Value,
                     Target = node.Element(ns + "target")?.Value,
-                    DeveloperNote = node.Elements(ns + "note")
-                                        .FirstOrDefault(n => n.Attribute("from")?.Value == "Developer")?.Value,
-                    XliffGeneratorNote = node.Elements(ns + "note")
-                                            .FirstOrDefault(n => n.Attribute("from")?.Value == "Xliff Generator")?.Value,
-                    NabToolNote = node.Elements(ns + "note")
-                                      .FirstOrDefault(n => n.Attribute("from")?.Value == "NAB AL Tool Refresh Xlf")?.Value,
+                    DeveloperNote = node.Elements(ns + "note").FirstOrDefault(n => n.Attribute("from")?.Value == "Developer")?.Value,
+                    XliffGeneratorNote = node.Elements(ns + "note").FirstOrDefault(n => n.Attribute("from")?.Value == "Xliff Generator")?.Value,
+                    NabToolNote = node.Elements(ns + "note").FirstOrDefault(n => n.Attribute("from")?.Value == "NAB AL Tool Refresh Xlf")?.Value,
                     AlObjectTarget = node.Attribute("al-object-target")?.Value
                 };
             }).ToList();

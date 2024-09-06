@@ -36,7 +36,6 @@ namespace TranslationTool
                                         new XElement(xliffNs + "target", string.IsNullOrEmpty(tu.Target) ? "" : tu.Target)
                                     );
 
-
                                     transUnitElement.Add(
                                         new XElement(xliffNs + "note",
                                         new XAttribute("from", "Developer"),
