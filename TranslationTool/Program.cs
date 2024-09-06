@@ -1,4 +1,3 @@
-using System;
 using TranslationTool;
 
 namespace TranslationTool
