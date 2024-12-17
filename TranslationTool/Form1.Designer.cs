@@ -52,6 +52,8 @@ namespace TranslationTool
             developerNoteCheckBox = new CheckBox();
             targetLanguageTextBox = new TextBox();
             targetLanguageLabel = new Label();
+            actionsToolStripMenuItem = new ToolStripMenuItem();
+            removeNABToolTextToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)translationUnitList).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource).BeginInit();
@@ -61,15 +63,15 @@ namespace TranslationTool
             // 
             openFileDialog1.DefaultExt = "xlf";
             openFileDialog1.FileName = "openFileDialog1";
-            openFileDialog1.Filter = "xlf files (*.xlf)|*.xlf";
+            openFileDialog1.Filter = "xlf files (*.xlf)|*.xlf|Xliff files (*.xliff)|*.xliff";
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, actionsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(7, 3, 0, 3);
-            menuStrip1.Size = new Size(1057, 25);
+            menuStrip1.Size = new Size(1061, 25);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -201,7 +203,7 @@ namespace TranslationTool
             // 
             // targetLanguageTextBox
             // 
-            targetLanguageTextBox.Location = new Point(973, 29);
+            targetLanguageTextBox.Location = new Point(981, 28);
             targetLanguageTextBox.Margin = new Padding(4, 3, 4, 3);
             targetLanguageTextBox.Name = "targetLanguageTextBox";
             targetLanguageTextBox.Size = new Size(67, 23);
@@ -211,18 +213,32 @@ namespace TranslationTool
             // 
             targetLanguageLabel.AutoSize = true;
             targetLanguageLabel.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            targetLanguageLabel.Location = new Point(850, 29);
+            targetLanguageLabel.Location = new Point(850, 31);
             targetLanguageLabel.Margin = new Padding(4, 0, 4, 0);
             targetLanguageLabel.Name = "targetLanguageLabel";
             targetLanguageLabel.Size = new Size(124, 16);
             targetLanguageLabel.TabIndex = 12;
             targetLanguageLabel.Text = "Target Langauge";
             // 
+            // actionsToolStripMenuItem
+            // 
+            actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { removeNABToolTextToolStripMenuItem });
+            actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
+            actionsToolStripMenuItem.Size = new Size(59, 19);
+            actionsToolStripMenuItem.Text = "Actions";
+            // 
+            // removeNABToolTextToolStripMenuItem
+            // 
+            removeNABToolTextToolStripMenuItem.Name = "removeNABToolTextToolStripMenuItem";
+            removeNABToolTextToolStripMenuItem.Size = new Size(192, 22);
+            removeNABToolTextToolStripMenuItem.Text = "Remove NAB Tool text";
+            removeNABToolTextToolStripMenuItem.Click += RemoveNABToolTextToolStripMenuItem_Click;
+            // 
             // TranslationToolForm
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1057, 739);
+            ClientSize = new Size(1061, 739);
             Controls.Add(targetLanguageLabel);
             Controls.Add(targetLanguageTextBox);
             Controls.Add(developerNoteCheckBox);
@@ -239,6 +255,7 @@ namespace TranslationTool
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Margin = new Padding(4, 3, 4, 3);
+            MinimumSize = new Size(1077, 778);
             Name = "TranslationToolForm";
             Text = "Translation Tool";
             menuStrip1.ResumeLayout(false);
@@ -271,5 +288,7 @@ namespace TranslationTool
         private CheckBox developerNoteCheckBox;
         private TextBox targetLanguageTextBox;
         private Label targetLanguageLabel;
+        private ToolStripMenuItem actionsToolStripMenuItem;
+        private ToolStripMenuItem removeNABToolTextToolStripMenuItem;
     }
 }
