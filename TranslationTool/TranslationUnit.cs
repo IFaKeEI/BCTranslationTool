@@ -11,5 +11,6 @@ namespace TranslationTool
         public string? DeveloperNote { get; set; }
         public string? AlObjectTarget { get; set; }
         public string? NabToolNote { get; set; }
+        public bool? IsChanged { get; set; }
     }
 }

@@ -38,6 +38,9 @@ namespace TranslationTool
             fileToolStripMenuItem = new ToolStripMenuItem();
             uploadToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
+            actionsToolStripMenuItem = new ToolStripMenuItem();
+            removeNABToolTextToolStripMenuItem = new ToolStripMenuItem();
+            moveNoteToTargetToolStripMenuItem = new ToolStripMenuItem();
             source = new ColumnHeader();
             target = new ColumnHeader();
             translationUnitList = new DataGridView();
@@ -52,8 +55,7 @@ namespace TranslationTool
             developerNoteCheckBox = new CheckBox();
             targetLanguageTextBox = new TextBox();
             targetLanguageLabel = new Label();
-            actionsToolStripMenuItem = new ToolStripMenuItem();
-            removeNABToolTextToolStripMenuItem = new ToolStripMenuItem();
+            showChangedRowCheckBox = new CheckBox();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)translationUnitList).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource).BeginInit();
@@ -96,6 +98,27 @@ namespace TranslationTool
             saveAsToolStripMenuItem.Text = "Save As";
             saveAsToolStripMenuItem.Click += SaveAsToolStripMenuItem_Click;
             // 
+            // actionsToolStripMenuItem
+            // 
+            actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { removeNABToolTextToolStripMenuItem, moveNoteToTargetToolStripMenuItem });
+            actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
+            actionsToolStripMenuItem.Size = new Size(59, 19);
+            actionsToolStripMenuItem.Text = "Actions";
+            // 
+            // removeNABToolTextToolStripMenuItem
+            // 
+            removeNABToolTextToolStripMenuItem.Name = "removeNABToolTextToolStripMenuItem";
+            removeNABToolTextToolStripMenuItem.Size = new Size(192, 22);
+            removeNABToolTextToolStripMenuItem.Text = "Remove NAB Tool text";
+            removeNABToolTextToolStripMenuItem.Click += RemoveNABToolTextToolStripMenuItem_Click;
+            // 
+            // moveNoteToTargetToolStripMenuItem
+            // 
+            moveNoteToTargetToolStripMenuItem.Name = "moveNoteToTargetToolStripMenuItem";
+            moveNoteToTargetToolStripMenuItem.Size = new Size(192, 22);
+            moveNoteToTargetToolStripMenuItem.Text = "Move Note to Target";
+            moveNoteToTargetToolStripMenuItem.Click += MoveNoteToTargetToolStripMenuItem_Click;
+            // 
             // source
             // 
             source.Text = "Source";
@@ -114,6 +137,7 @@ namespace TranslationTool
             translationUnitList.RowTemplate.Height = 25;
             translationUnitList.Size = new Size(1036, 621);
             translationUnitList.TabIndex = 2;
+            translationUnitList.CellValueChanged += TranslationUnitList_CellValueChanged;
             // 
             // sourceFilter
             // 
@@ -179,7 +203,7 @@ namespace TranslationTool
             // 
             nonTranslatedCheckBox.AutoSize = true;
             nonTranslatedCheckBox.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            nonTranslatedCheckBox.Location = new Point(850, 54);
+            nonTranslatedCheckBox.Location = new Point(850, 31);
             nonTranslatedCheckBox.Margin = new Padding(4, 3, 4, 3);
             nonTranslatedCheckBox.Name = "nonTranslatedCheckBox";
             nonTranslatedCheckBox.Size = new Size(157, 20);
@@ -192,7 +216,7 @@ namespace TranslationTool
             // 
             developerNoteCheckBox.AutoSize = true;
             developerNoteCheckBox.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            developerNoteCheckBox.Location = new Point(850, 80);
+            developerNoteCheckBox.Location = new Point(850, 57);
             developerNoteCheckBox.Margin = new Padding(4, 3, 4, 3);
             developerNoteCheckBox.Name = "developerNoteCheckBox";
             developerNoteCheckBox.Size = new Size(187, 20);
@@ -203,7 +227,7 @@ namespace TranslationTool
             // 
             // targetLanguageTextBox
             // 
-            targetLanguageTextBox.Location = new Point(981, 28);
+            targetLanguageTextBox.Location = new Point(143, 28);
             targetLanguageTextBox.Margin = new Padding(4, 3, 4, 3);
             targetLanguageTextBox.Name = "targetLanguageTextBox";
             targetLanguageTextBox.Size = new Size(67, 23);
@@ -213,32 +237,32 @@ namespace TranslationTool
             // 
             targetLanguageLabel.AutoSize = true;
             targetLanguageLabel.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            targetLanguageLabel.Location = new Point(850, 31);
+            targetLanguageLabel.Location = new Point(12, 31);
             targetLanguageLabel.Margin = new Padding(4, 0, 4, 0);
             targetLanguageLabel.Name = "targetLanguageLabel";
             targetLanguageLabel.Size = new Size(124, 16);
             targetLanguageLabel.TabIndex = 12;
             targetLanguageLabel.Text = "Target Langauge";
             // 
-            // actionsToolStripMenuItem
+            // showChangedRowCheckBox
             // 
-            actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { removeNABToolTextToolStripMenuItem });
-            actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
-            actionsToolStripMenuItem.Size = new Size(59, 19);
-            actionsToolStripMenuItem.Text = "Actions";
-            // 
-            // removeNABToolTextToolStripMenuItem
-            // 
-            removeNABToolTextToolStripMenuItem.Name = "removeNABToolTextToolStripMenuItem";
-            removeNABToolTextToolStripMenuItem.Size = new Size(192, 22);
-            removeNABToolTextToolStripMenuItem.Text = "Remove NAB Tool text";
-            removeNABToolTextToolStripMenuItem.Click += RemoveNABToolTextToolStripMenuItem_Click;
+            showChangedRowCheckBox.AutoSize = true;
+            showChangedRowCheckBox.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            showChangedRowCheckBox.Location = new Point(850, 83);
+            showChangedRowCheckBox.Margin = new Padding(4, 3, 4, 3);
+            showChangedRowCheckBox.Name = "showChangedRowCheckBox";
+            showChangedRowCheckBox.Size = new Size(173, 20);
+            showChangedRowCheckBox.TabIndex = 13;
+            showChangedRowCheckBox.Text = "Show Changed Rows";
+            showChangedRowCheckBox.UseVisualStyleBackColor = true;
+            showChangedRowCheckBox.CheckedChanged += ShowChangedRowCheckBox_CheckedChanged;
             // 
             // TranslationToolForm
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1061, 739);
+            Controls.Add(showChangedRowCheckBox);
             Controls.Add(targetLanguageLabel);
             Controls.Add(targetLanguageTextBox);
             Controls.Add(developerNoteCheckBox);
@@ -290,5 +314,7 @@ namespace TranslationTool
         private Label targetLanguageLabel;
         private ToolStripMenuItem actionsToolStripMenuItem;
         private ToolStripMenuItem removeNABToolTextToolStripMenuItem;
+        private ToolStripMenuItem moveNoteToTargetToolStripMenuItem;
+        private CheckBox showChangedRowCheckBox;
     }
 }

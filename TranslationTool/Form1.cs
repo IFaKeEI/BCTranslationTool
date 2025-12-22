@@ -20,6 +20,7 @@ namespace TranslationTool
         private Rectangle recTargetLanguageLabel;
         private Rectangle recShowUntranslated;
         private Rectangle recShowDeveloperNotes;
+        private Rectangle recShowChangedRowCheckBox;
 
 
 
@@ -39,6 +40,7 @@ namespace TranslationTool
             recTargetLanguageLabel = new Rectangle(targetLanguageLabel.Location, targetLanguageLabel.Size);
             recShowUntranslated = new Rectangle(nonTranslatedCheckBox.Location, nonTranslatedCheckBox.Size);
             recShowDeveloperNotes = new Rectangle(developerNoteCheckBox.Location, developerNoteCheckBox.Size);
+            recShowChangedRowCheckBox = new Rectangle(showChangedRowCheckBox.Location, showChangedRowCheckBox.Size);
         }
 
         private void TranslationToolForm_Resize(object? sender, EventArgs e)
@@ -54,6 +56,7 @@ namespace TranslationTool
             Resize_Control(targetLanguageLabel, recTargetLanguageLabel);
             Resize_Control(nonTranslatedCheckBox, recShowUntranslated);
             Resize_Control(developerNoteCheckBox, recShowDeveloperNotes);
+            Resize_Control(showChangedRowCheckBox, recShowChangedRowCheckBox);
         }
 
         private void Resize_Control(Control c, Rectangle r)
@@ -83,6 +86,7 @@ namespace TranslationTool
                 this.translationUnitList.Columns["AlObjectTarget"].Visible = false;
                 this.translationUnitList.Columns["NabToolNote"].Visible = false;
                 this.translationUnitList.Columns["DeveloperNote"].Visible = false;
+                this.translationUnitList.Columns["IsChanged"].Visible = false;
                 this.targetLanguageTextBox.Text = targetLangauge;
             }
         }
@@ -131,22 +135,45 @@ namespace TranslationTool
             ApplyFilters();
         }
 
+        private void ShowChangedRowCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ApplyFilters();
+        }
+
         private void ApplyFilters()
         {
             string sourceFilterText = this.sourceFilter.Text;
             string noteFilterText = this.noteFilter.Text;
             string targetFilterText = this.targetFilter.Text;
             bool filterUntranslated = this.nonTranslatedCheckBox.Checked;
+            bool showChangedOnly = this.showChangedRowCheckBox.Checked;
 
             var filteredList = translationUnits?.Where(tu =>
-                (string.IsNullOrEmpty(sourceFilterText) || (tu.Source != null && tu.Source.Contains(sourceFilterText, StringComparison.OrdinalIgnoreCase))) &&
-                (string.IsNullOrEmpty(targetFilterText) || (tu.Target != null && tu.Target.Contains(targetFilterText, StringComparison.OrdinalIgnoreCase))) &&
-                (string.IsNullOrEmpty(noteFilterText) || (tu.XliffGeneratorNote != null && tu.XliffGeneratorNote.Contains(noteFilterText, StringComparison.OrdinalIgnoreCase))) &&
-                (!filterUntranslated || string.IsNullOrEmpty(tu.Target) || tu.Target.Contains("[NAB"))
-                ).ToList();
+                // Source filter
+                (string.IsNullOrEmpty(sourceFilterText) ||
+                    (tu.Source != null &&
+                     tu.Source.Contains(sourceFilterText, StringComparison.OrdinalIgnoreCase))) &&
 
-            this.bindingSource.DataSource = filteredList;
-            this.translationUnitList.DataSource = bindingSource;
+                // Target filter
+                (string.IsNullOrEmpty(targetFilterText) ||
+                    (tu.Target != null &&
+                     tu.Target.Contains(targetFilterText, StringComparison.OrdinalIgnoreCase))) &&
+
+                // Note filter
+                (string.IsNullOrEmpty(noteFilterText) ||
+                    (tu.XliffGeneratorNote != null &&
+                     tu.XliffGeneratorNote.Contains(noteFilterText, StringComparison.OrdinalIgnoreCase))) &&
+
+                // Untranslated checkbox
+                (!filterUntranslated ||
+                    string.IsNullOrEmpty(tu.Target) ||
+                    tu.Target.Contains("[NAB")) &&
+
+                // Changed-only checkbox
+                (!showChangedOnly || (tu.IsChanged ?? false))
+            ).ToList();
+
+            bindingSource.DataSource = filteredList;
         }
 
         private void DeveloperNoteCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -182,8 +209,8 @@ namespace TranslationTool
                 "[NAB: REVIEW]"
             };
 
-            if(translationUnits is not null)
-            { 
+            if (translationUnits is not null)
+            {
                 foreach (var tu in translationUnits)
                 {
                     if (tu.Target != null)
@@ -193,6 +220,7 @@ namespace TranslationTool
                             if (tu.Target.StartsWith(prefix))
                             {
                                 tu.Target = tu.Target.Substring(prefix.Length).TrimStart();
+                                tu.IsChanged = true;
                                 break;
                             }
                         }
@@ -201,6 +229,40 @@ namespace TranslationTool
             }
 
             ApplyFilters(); // Reapply filters to refresh the view
+        }
+
+        private void MoveNoteToTargetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want to move Notes into translation Targets? This will only move Notes to untranslated Targets.", "Confirm Action", MessageBoxButtons.YesNo);
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+
+            if (translationUnits is not null)
+            {
+                foreach (var tu in translationUnits)
+                {
+                    if (tu.DeveloperNote != null)
+                    {
+                        if (tu.Target == null)
+                        {
+                            tu.Target = tu.DeveloperNote;
+                            tu.IsChanged = true;
+                        }
+                    }
+                }
+            }
+
+            ApplyFilters(); // Reapply filters to refresh the view
+        }
+
+        private void TranslationUnitList_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                translationUnitList.Rows[e.RowIndex].Cells[translationUnitList.Columns["IsChanged"].Index].Value = true;
+            }
         }
     }
 }

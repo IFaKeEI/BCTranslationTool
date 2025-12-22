@@ -31,7 +31,8 @@ namespace TranslationTool
                     DeveloperNote = node.Elements(ns + "note").FirstOrDefault(n => n.Attribute("from")?.Value == "Developer")?.Value,
                     XliffGeneratorNote = node.Elements(ns + "note").FirstOrDefault(n => n.Attribute("from")?.Value == "Xliff Generator")?.Value,
                     NabToolNote = node.Elements(ns + "note").FirstOrDefault(n => n.Attribute("from")?.Value == "NAB AL Tool Refresh Xlf")?.Value,
-                    AlObjectTarget = node.Attribute("al-object-target")?.Value
+                    AlObjectTarget = node.Attribute("al-object-target")?.Value,
+                    IsChanged = false
                 };
             }).ToList();
 
