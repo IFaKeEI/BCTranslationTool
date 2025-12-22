@@ -245,7 +245,7 @@ namespace TranslationTool
                 {
                     if (tu.DeveloperNote != null)
                     {
-                        if (tu.Target == null)
+                        if (tu.Target == null || tu.Target == "")
                         {
                             tu.Target = tu.DeveloperNote;
                             tu.IsChanged = true;
